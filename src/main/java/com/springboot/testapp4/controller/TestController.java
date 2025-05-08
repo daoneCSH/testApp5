@@ -1,9 +1,11 @@
 package com.springboot.testapp4.controller;
 
 import com.springboot.testapp4.commons.DebugLog;
+import com.springboot.testapp4.commons.DynamicDataSource;
 import com.springboot.testapp4.data.entity.User;
 import com.springboot.testapp4.form.TestForm;
 import com.springboot.testapp4.service.TestService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +14,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 /** Test 애플리케이션 컨트롤러 */
+@Slf4j
 @Controller
 @RequestMapping("/test")
 public class TestController {
@@ -46,6 +48,8 @@ public class TestController {
         //표시용 모델에 저장
         model.addAttribute("list", list);
         model.addAttribute("title", "#{category.title}");
+        log.info(DynamicDataSource.getNowKey());
+        model.addAttribute("nowdb", DynamicDataSource.getNowKey());
 
         return "crud";
     }
@@ -162,15 +166,17 @@ public class TestController {
         return "redirect:/test";
     }
 
-//    @GetMapping("/connect")
-//    public String connect() throws SQLException, ClassNotFoundException {
-//        databaseConnection.connect();
-//        return "connect";
-//    }
-//
-//    @GetMapping("/disconnect")
-//    public String disconnect() throws SQLException, ClassNotFoundException {
-//        databaseConnection.disconnect();
-//        return "disconnect";
-//    }
+    @GetMapping("/set/{db}")
+    public String setDb(@PathVariable String db, RedirectAttributes redirectAttributes) throws Exception {
+        try {
+            service.setDB(db);
+            setUpForm();
+            redirectAttributes.addFlashAttribute("changedDBcomplete", db + "로 변경 되었습니다.");
+            return "redirect:/test";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("changedDBcomplete", db + " 변경 실패");
+        }
+        return "redirect:/test";
+    }
 }

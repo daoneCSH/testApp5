@@ -26,4 +26,6 @@ public interface TestService {
 
     /** 계정 삭제 */
     void delete(long id);
+
+    void setDB(String dbKey);
 }

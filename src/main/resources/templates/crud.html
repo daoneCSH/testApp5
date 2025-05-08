@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${title}">Title</title>
+    <label th:text="${nowdb}"></label>
 </head>
 <body>
     <h1 th:text="#{crud.title}">title</h1>
@@ -31,6 +32,7 @@
     </p>
     <p th:if="${delcomplete}" th:text="${delcomplete}" style="color:blue"></p>
     <p th:if="${checkcomplete}" th:text="${checkcomplete}" style="color: blue;"></p>
+    <p th:if="${changedDBcomplete}" th:text="${changedDBcomplete}" style="color: blue;"></p>
     <p th:if="${msg}" th:text="${msg}" style="color:red"></p>
     <table border="1" th:unless="${#lists.isEmpty(list)}" style="table-layout: fixed">
         <tr>

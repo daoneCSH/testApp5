@@ -1,10 +1,12 @@
 package com.springboot.testapp4.service;
 
+import com.springboot.testapp4.commons.DynamicDataSource;
 import com.springboot.testapp4.commons.DebugLog;
 import com.springboot.testapp4.commons.crypo.PacketCrypto;
 import com.springboot.testapp4.data.entity.User;
 import com.springboot.testapp4.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,9 @@ public class TestServiceImpl implements TestService {
     /** Repository: 인젝션 */
     @Autowired
     UserRepository repo;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public Iterable<User> selectAll() {
@@ -64,5 +69,10 @@ public class TestServiceImpl implements TestService {
     @Override
     public void delete(long id) {
         repo.deleteById(id);
+    }
+
+    @Override
+    public void setDB(String dbKey) {
+        DynamicDataSource.setDataSourceKey(dbKey);
     }
 }

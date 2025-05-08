@@ -1,78 +1,55 @@
 package com.springboot.testapp4.service;
 
 import com.springboot.testapp4.commons.DynamicDataSource;
-import com.springboot.testapp4.commons.DebugLog;
-import com.springboot.testapp4.commons.crypo.PacketCrypto;
+import com.springboot.testapp4.data.dao.UserDao;
 import com.springboot.testapp4.data.entity.User;
-import com.springboot.testapp4.data.repository.UserRepository;
+import com.springboot.testapp4.filter.DataSourceFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
+@Slf4j
 @Service
 @Transactional
 public class TestServiceImpl implements TestService {
-    static final String keyString = "04a759baaa5e66df";
     /** Repository: 인젝션 */
     @Autowired
-    UserRepository repo;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    UserDao dao;
 
     @Override
     public Iterable<User> selectAll() {
-        return repo.findAll();
+        return dao.selectAll();
     }
 
     @Override
-    public Optional<User> selectById(long id) {
-        return repo.findById(id);
+    public User selectById(long id) {
+        return dao.selectUser(id);
     }
 
     @Override
     public long selectByKey(String myAccount) {
-        DebugLog.log("selectByKey", myAccount);
-        User u = repo.getByUid(myAccount);
-        DebugLog.log("selectByKey", u);
+        User u = dao.findUserByKey(myAccount);
         return u.getId();
     }
 
     @Override
-    public boolean checkAccountPassword(String myAccount, String myPassword) throws Exception {
-        DebugLog.log("checkAccountPassword", myAccount + " " + myPassword);
-        boolean check = false;
-        User u = repo.getByUid(myAccount);
-        DebugLog.log("checkAccountPassword", u);
-        String dep = new String(PacketCrypto.decryptDecodeBase64(u.getPassword(),keyString));
-        DebugLog.log("checkAccountPassword", "Decode:" + dep);
-        if(dep.equals(myPassword)) {
-            check = true;
-        }
-        return check;
+    public boolean checkAccountPassword(String myAccount, String myPassword) throws Exception{
+        return dao.checkUser(myAccount, myPassword);
     }
 
     @Override
     public void insert(User data) throws Exception{
-        data.setPassword(PacketCrypto.encryptEncodeBase64(data.getPassword().getBytes(),keyString));
-        repo.save(data);
+        dao.insertUser(data);
     }
 
     @Override
-    public void update(User data) {
-        repo.save(data);
-    }
-
-    @Override
-    public void delete(long id) {
-        repo.deleteById(id);
+    public void delete(long id) throws Exception {
+        dao.deleteUser(id);
     }
 
     @Override
     public void setDB(String dbKey) {
-        DynamicDataSource.setDataSourceKey(dbKey);
+        DataSourceFilter.setDB(dbKey);
     }
 }

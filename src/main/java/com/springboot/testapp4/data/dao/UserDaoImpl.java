@@ -1,5 +1,6 @@
 package com.springboot.testapp4.data.dao;
 
+import com.springboot.testapp4.commons.crypo.PacketCrypto;
 import com.springboot.testapp4.data.entity.User;
 import com.springboot.testapp4.data.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class UserDaoImpl implements UserDao {
+    static final String keyString = "04a759baaa5e66df";
+
     private final UserRepository repository;
 
     @Autowired
@@ -19,7 +22,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User insertUser(User user) {
+    public Iterable<User> selectAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public User insertUser(User user) throws Exception {
+        user.setPassword(PacketCrypto.encryptEncodeBase64(user.getPassword().getBytes(),keyString));
         return repository.save(user);
     }
 
@@ -30,8 +39,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean checkUser(String username, String password) {
-        return false;
+    public User findUserByKey(String key) {
+        Optional<User> op = repository.findByUid(key);
+        return op.orElse(null);
+    }
+
+    @Override
+    public boolean checkUser(String username, String myPassword) throws Exception {
+        boolean check = false;
+        Optional<User> u = repository.findByUid(username);
+        String dep = new String(PacketCrypto.decryptDecodeBase64(u.get().getPassword(),keyString));
+        log.info("checkAccountPassword input:{} Decode:{}", username, dep);
+        if(dep.equals(myPassword)) {
+            check = true;
+        }
+        return check;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.springboot.testapp4.controller;
 
-import com.springboot.testapp4.commons.DebugLog;
 import com.springboot.testapp4.commons.DynamicDataSource;
 import com.springboot.testapp4.data.entity.User;
 import com.springboot.testapp4.form.TestForm;
 import com.springboot.testapp4.service.TestService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,19 +38,17 @@ public class TestController {
      * 데이터 목록 표시
      */
     @GetMapping
-    public String showList(TestForm form, Model model) {
+    public String showList(TestForm form, Model model, HttpSession session) {
 //        setUpForm();
         //퀴즈 목록 취득
         Iterable<User> list = service.selectAll();
-
-        DebugLog.log("showList", list);
 
         //표시용 모델에 저장
         model.addAttribute("list", list);
         model.addAttribute("title", "#{category.title}");
         log.info(DynamicDataSource.getNowKey());
-        model.addAttribute("nowdb", DynamicDataSource.getNowKey());
-
+        String db = (String) session.getAttribute("selectedDb");
+        model.addAttribute("selectedDb", db != null ? db : "DB1"); // 기본값 DB1
         return "crud";
     }
 
@@ -58,8 +56,7 @@ public class TestController {
      * 데이터를 1건 등록
      */
     @PostMapping("/insert")
-    public String insert(@Validated TestForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws Exception {
-        DebugLog.log("insert", form);
+    public String insert(@Validated TestForm form, BindingResult bindingResult, Model model, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
 
         // Form 에서 Entiry 로 넣기
         User data = make(form);
@@ -78,13 +75,12 @@ public class TestController {
 
         } else {
             // 에러가 발생한 경우에는 목록 표시로 변경
-            return showList(form, model);
+            return showList(form, model, session);
         }
     }
 
     @PostMapping("/check")
     public String check(@Validated TestForm form, RedirectAttributes redirectAttributes) throws Exception {
-        DebugLog.log("Check", form);
         try {
             boolean c = service.checkAccountPassword(form.getUid(), form.getPassword());
 
@@ -106,15 +102,8 @@ public class TestController {
     @GetMapping("/{id}")
     public String showUpdate(TestForm form, @PathVariable Integer id, Model model) {
         // 데이터를 취득(Optional로 래핑)
-        Optional<User> data = service.selectById(id);
-
-        // form에 채워넣기
-        Optional<TestForm> optional = data.map(t->makeForm(t));
-
-        // form이 null이 아니라면 값을 취득
-        if (optional.isPresent()) {
-            form=optional.get();
-        }
+        User data = service.selectById(id);
+        form = makeForm(data);
 
         // 변경용 모델 생성
         makeUpdateModel(form,model);
@@ -159,18 +148,19 @@ public class TestController {
      * id를 키로 사용해 데이터를 삭제
      */
     @PostMapping("/delete")
-    public String delete(@RequestParam("id") String id, Model model, RedirectAttributes redirectAttributes) {
+    public String delete(@RequestParam("id") String id, Model model, RedirectAttributes redirectAttributes) throws Exception {
         // 데이터를 1건 삭제하고 리다이렉트
         service.delete(Integer.parseInt(id));
         redirectAttributes.addFlashAttribute("delcomplete", "삭제 완료했습니다");
         return "redirect:/test";
     }
 
-    @GetMapping("/set/{db}")
-    public String setDb(@PathVariable String db, RedirectAttributes redirectAttributes) throws Exception {
+    @GetMapping("/set")
+    public String setDb(@RequestParam("db") String db, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
         try {
             service.setDB(db);
             setUpForm();
+            session.setAttribute("selectedDb", db);
             redirectAttributes.addFlashAttribute("changedDBcomplete", db + "로 변경 되었습니다.");
             return "redirect:/test";
 

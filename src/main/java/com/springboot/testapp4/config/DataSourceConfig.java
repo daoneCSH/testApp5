@@ -62,6 +62,8 @@ public class DataSourceConfig {
         Map<Object, Object> dataSources = new HashMap<>();
         dataSources.put("DB1", db1());
         dataSources.put("DB2", db2());
+        dataSources.put("MARIADB", db1());
+        dataSources.put("PGSQL", db2());
 
         DynamicDataSource routingDataSource = new DynamicDataSource();
         routingDataSource.setDefaultTargetDataSource(db1());

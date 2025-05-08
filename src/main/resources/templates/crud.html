@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${title}">Title</title>
-    <label th:text="${nowdb}"></label>
+    <form id="dbForm" method="GET" th:action="@{/test/set}">
+        <label>
+            <input type="radio" name="db" value="DB1" th:checked="${selectedDb} == 'DB1' or ${selectedDb} == null" onchange="document.getElementById('dbForm').submit()"> MARIADB
+        </label>
+        <label>
+            <input type="radio" name="db" value="DB2" th:checked="${selectedDb} == 'DB2'" onchange="document.getElementById('dbForm').submit()"> PGSQL
+        </label>
+    </form>
 </head>
 <body>
     <h1 th:text="#{crud.title}">title</h1>

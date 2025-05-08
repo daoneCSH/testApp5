@@ -21,7 +21,7 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.springboot.testapp4.data.repository",
+        basePackages = "com.springboot.testapp4.repository",
         entityManagerFactoryRef = "entityManagerFactory",
         transactionManagerRef = "transactionManager"
 )
@@ -75,7 +75,7 @@ public class DataSourceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dynamicDataSource) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dynamicDataSource);
-        emf.setPackagesToScan("com.springboot.testapp4.data.entity"); // 엔티티 경로
+        emf.setPackagesToScan("com.springboot.testapp4.domain"); // 엔티티 경로
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Map<String, Object> jpaProps = new HashMap<>();

@@ -1,6 +1,6 @@
 package com.springboot.testapp4.service;
 
-import com.springboot.testapp4.data.entity.User;
+import com.springboot.testapp4.domain.User;
 
 /** test 서비스 : Service  */
 public interface TestService {

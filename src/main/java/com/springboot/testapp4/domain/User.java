@@ -1,4 +1,4 @@
-package com.springboot.testapp4.data.entity;
+package com.springboot.testapp4.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

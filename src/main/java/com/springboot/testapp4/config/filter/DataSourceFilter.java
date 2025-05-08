@@ -1,13 +1,11 @@
-package com.springboot.testapp4.filter;
+package com.springboot.testapp4.config.filter;
 
-import com.springboot.testapp4.commons.DynamicDataSource;
-import com.springboot.testapp4.data.repository.UserRepository;
+import com.springboot.testapp4.config.DynamicDataSource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 

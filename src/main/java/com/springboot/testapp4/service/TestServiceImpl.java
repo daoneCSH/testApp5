@@ -1,9 +1,8 @@
 package com.springboot.testapp4.service;
 
-import com.springboot.testapp4.commons.DynamicDataSource;
-import com.springboot.testapp4.data.dao.UserDao;
-import com.springboot.testapp4.data.entity.User;
-import com.springboot.testapp4.filter.DataSourceFilter;
+import com.springboot.testapp4.dao.UserDao;
+import com.springboot.testapp4.domain.User;
+import com.springboot.testapp4.config.filter.DataSourceFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

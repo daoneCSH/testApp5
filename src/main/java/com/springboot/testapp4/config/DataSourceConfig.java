@@ -1,6 +1,5 @@
 package com.springboot.testapp4.config;
 
-import com.springboot.testapp4.commons.DynamicDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.jdbc.DataSourceBuilder;

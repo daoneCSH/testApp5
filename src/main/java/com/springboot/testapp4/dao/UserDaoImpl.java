@@ -1,8 +1,8 @@
-package com.springboot.testapp4.data.dao;
+package com.springboot.testapp4.dao;
 
 import com.springboot.testapp4.commons.crypo.PacketCrypto;
-import com.springboot.testapp4.data.entity.User;
-import com.springboot.testapp4.data.repository.UserRepository;
+import com.springboot.testapp4.domain.User;
+import com.springboot.testapp4.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

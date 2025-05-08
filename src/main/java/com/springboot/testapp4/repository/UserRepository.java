@@ -1,12 +1,10 @@
-package com.springboot.testapp4.data.repository;
+package com.springboot.testapp4.repository;
 
-import com.springboot.testapp4.data.entity.User;
+import com.springboot.testapp4.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    User getByUid(String uid);
-
     Optional<User> findByUid(String uid);
 }

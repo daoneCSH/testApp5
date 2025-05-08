@@ -1,7 +1,7 @@
 package com.springboot.testapp4.controller;
 
-import com.springboot.testapp4.commons.DynamicDataSource;
-import com.springboot.testapp4.data.entity.User;
+import com.springboot.testapp4.config.DynamicDataSource;
+import com.springboot.testapp4.domain.User;
 import com.springboot.testapp4.form.TestForm;
 import com.springboot.testapp4.service.TestService;
 import jakarta.servlet.http.HttpSession;
@@ -13,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 /** Test 애플리케이션 컨트롤러 */
 @Slf4j

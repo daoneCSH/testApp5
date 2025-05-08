@@ -1,4 +1,4 @@
-package com.springboot.testapp4.commons;
+package com.springboot.testapp4.config;
 
 import lombok.Getter;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;

@@ -1,6 +1,6 @@
-package com.springboot.testapp4.data.dao;
+package com.springboot.testapp4.dao;
 
-import com.springboot.testapp4.data.entity.User;
+import com.springboot.testapp4.domain.User;
 
 public interface UserDao {
     Iterable<User> selectAll();

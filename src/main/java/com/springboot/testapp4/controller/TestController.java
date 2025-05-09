@@ -43,7 +43,6 @@ public class TestController {
 
         //표시용 모델에 저장
         model.addAttribute("list", list);
-        model.addAttribute("title", "#{category.title}");
         log.info(DynamicDataSource.getNowKey());
         String db = (String) session.getAttribute("selectedDb");
         model.addAttribute("selectedDb", db != null ? db : "DB1"); // 기본값 DB1

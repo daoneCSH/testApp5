@@ -30,10 +30,17 @@ public class DataSourceConfig {
     private static final String MARIADB_URL = "jdbc:mariadb://localhost:3307/testApp4";
     private static final String MARIADB_USER = "root";
     private static final String MARIADB_PASSWORD = "112233";
+    private static final String MARIADB_DRIVER = "org.mariadb.jdbc.Driver";
 
     private static final String PGSQL_URL = "jdbc:postgresql://localhost:5432/testApp4db";
     private static final String PGSQL_USER = "postgres";
     private static final String PGSQL_PASSWORD = "112233";
+    private static final String PGSQL_DRIVER = "org.postgresql.Driver";
+
+    private static final String MYSQL_URL = "jdbc:mysql://localhost:3309/testapp4";
+    private static final String MYSQL_USER = "root";
+    private static final String MYSQL_PASSWORD = "112233";
+    private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     @Bean
     public DataSource db1() {
@@ -41,7 +48,7 @@ public class DataSourceConfig {
                 .url(MARIADB_URL)
                 .username(MARIADB_USER)
                 .password(MARIADB_PASSWORD)
-                .driverClassName("org.mariadb.jdbc.Driver")
+                .driverClassName(MARIADB_DRIVER)
                 .build();
     }
 
@@ -51,7 +58,17 @@ public class DataSourceConfig {
                 .url(PGSQL_URL)
                 .username(PGSQL_USER)
                 .password(PGSQL_PASSWORD)
-                .driverClassName("org.postgresql.Driver")
+                .driverClassName(PGSQL_DRIVER)
+                .build();
+    }
+
+    @Bean
+    public DataSource db3() {
+        return DataSourceBuilder.create()
+                .url(MYSQL_URL)
+                .username(MYSQL_USER)
+                .password(MYSQL_PASSWORD)
+                .driverClassName(MYSQL_DRIVER)
                 .build();
     }
 
@@ -61,8 +78,10 @@ public class DataSourceConfig {
         Map<Object, Object> dataSources = new HashMap<>();
         dataSources.put("DB1", db1());
         dataSources.put("DB2", db2());
+        dataSources.put("DB3", db3());
         dataSources.put("MARIADB", db1());
         dataSources.put("PGSQL", db2());
+        dataSources.put("MYSQL", db3());
 
         DynamicDataSource routingDataSource = new DynamicDataSource();
         routingDataSource.setDefaultTargetDataSource(db1());

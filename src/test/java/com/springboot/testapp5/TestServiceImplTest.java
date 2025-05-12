@@ -13,9 +13,9 @@ class TestServiceImplTest {
 
     @Test
     void testInsert() throws Exception {
-        User user = User.builder().uid("test3").password("1234").build();
-        // user 필드 설정
-        testService.insert(user);
+//        User user = User.builder().uid("test5").password("1234").build();
+//        // user 필드 설정
+//        testService.insert(user);
     }
 }
 

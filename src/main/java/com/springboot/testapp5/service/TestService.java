@@ -21,6 +21,4 @@ public interface TestService {
 
     /** 계정 삭제 */
     void delete(long id) throws Exception;
-
-    void setDB(String dbKey);
 }

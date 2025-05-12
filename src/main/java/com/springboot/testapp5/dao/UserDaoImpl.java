@@ -33,8 +33,9 @@ public class UserDaoImpl implements UserDao {
 //            throw new IllegalArgumentException("이미 존재하는 값입니다: " + user.getUid());
             return null;
         }
-//        암호화 제거
-//        user.setPassword(PacketCrypto.encryptEncodeBase64(user.getPassword().getBytes(),keyString));
+        if (user.isEncode()) {
+            user.setPassword(PacketCrypto.encryptEncodeBase64(user.getPassword().getBytes(),keyString));
+        }
         return repository.save(user);
     }
 
@@ -54,10 +55,16 @@ public class UserDaoImpl implements UserDao {
     public boolean checkUser(String username, String myPassword) throws Exception {
         boolean check = false;
         Optional<User> u = repository.findByUid(username);
-//      복호화 제거
-//        String dep = new String(PacketCrypto.decryptDecodeBase64(u.get().getPassword(),keyString));
-        String dep = u.get().getPassword();
+        if (!u.isPresent()) {
+            return false;
+        }
 
+        String dep;
+        if (u.get().isEncode()) {
+            dep = new String(PacketCrypto.decryptDecodeBase64(u.get().getPassword(),keyString));
+        } else {
+            dep = u.get().getPassword();
+        }
         log.info("checkAccountPassword input:{} Decode:{}", username, dep);
         if(dep.equals(myPassword)) {
             check = true;

@@ -1,6 +1,5 @@
 package com.springboot.testapp5.controller;
 
-import com.springboot.testapp5.config.DynamicDataSource;
 import com.springboot.testapp5.domain.User;
 import com.springboot.testapp5.form.TestForm;
 import com.springboot.testapp5.service.TestService;
@@ -43,9 +42,6 @@ public class TestController {
 
         //표시용 모델에 저장
         model.addAttribute("list", list);
-        log.info(DynamicDataSource.getNowKey());
-        String db = (String) session.getAttribute("selectedDb");
-        model.addAttribute("selectedDb", db != null ? db : "DB1"); // 기본값 DB1
         return "crud";
     }
 
@@ -155,7 +151,6 @@ public class TestController {
     @GetMapping("/set")
     public String setDb(@RequestParam("db") String db, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
         try {
-            service.setDB(db);
             setUpForm();
             session.setAttribute("selectedDb", db);
             redirectAttributes.addFlashAttribute("changedDBcomplete", db + "로 변경 되었습니다.");

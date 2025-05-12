@@ -2,7 +2,6 @@ package com.springboot.testapp5.service;
 
 import com.springboot.testapp5.dao.UserDao;
 import com.springboot.testapp5.domain.User;
-import com.springboot.testapp5.config.filter.DataSourceFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,17 +37,13 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void insert(User data) throws Exception{
-        dao.insertUser(data);
+    public void insert(User user) throws Exception{
+        log.info("insert data:{}", user);
+        dao.insertUser(user);
     }
 
     @Override
     public void delete(long id) throws Exception {
         dao.deleteUser(id);
-    }
-
-    @Override
-    public void setDB(String dbKey) {
-        DataSourceFilter.setDB(dbKey);
     }
 }

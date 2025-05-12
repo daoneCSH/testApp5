@@ -23,4 +23,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean encode;
 }
